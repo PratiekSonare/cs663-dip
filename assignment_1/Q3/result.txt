@@ -1,0 +1,4 @@
+Original V range: 0.003921569 1.0
+Stretched V range: 0.0 1.0
+Original V range (after masking): 0.003921569 0.49803922
+Stretched V range: 0.0 1.0
