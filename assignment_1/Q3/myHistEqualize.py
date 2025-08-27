@@ -6,7 +6,7 @@ from skimage.color import rgb2hsv, hsv2rgb
 import numpy as np
 from skimage.color import rgb2hsv, hsv2rgb
 
-def myHistEqualize(image_rgb, num_bins=256, mask_threshold=0.5):
+def myHistEqualize(image_rgb, num_bins=256):
     """
     Performs histogram equalization on the luminance (V) component of an RGB image,
     but only on pixels below a threshold (mask).
@@ -24,7 +24,7 @@ def myHistEqualize(image_rgb, num_bins=256, mask_threshold=0.5):
     v_channel = image_hsv[:, :, 2]
 
     # Define mask
-    mask = v_channel <= mask_threshold
+    mask = v_channel <= 0.5
     v_masked = v_channel[mask]  # 1D values to process
 
     # Histogram Equalization on masked pixels only

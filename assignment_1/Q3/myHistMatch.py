@@ -57,16 +57,15 @@ def myHistMatch(source_rgb, ref_rgb, num_bins=256):
 
     # Convert back to RGB
     matched_rgb = lab2rgb(matched_lab)
-    return np.clip(matched_rgb, 0, 1)
+    return matched_rgb
 
 # Load images
 try:
     retina_image = mpimg.imread('data/hist/retina.png')
-    retina_ref = mpimg.imread('data/hist/retinaRef.png')
+    retina_ref = mpimg.imread('data/hist/retinaRef.png') #appears flipped!
+    
 except FileNotFoundError:
-    print("Error: retina images not found. Please check file paths.")
-    retina_image = np.random.rand(256, 256, 3)
-    retina_ref = np.random.rand(256, 256, 3)
+    print("Check file paths.")
     
 # Perform histogram matching
 matched_image = myHistMatch(retina_image, retina_ref)
@@ -80,7 +79,7 @@ axes[0, 0].set_title('Original Image')
 axes[0, 1].imshow(retina_ref)
 axes[0, 1].set_title('Reference Image')
 axes[0, 2].imshow(matched_image)
-axes[0, 2].set_title('Matched Image')
+axes[0, 2].set_title('Image (after Matching)')
 
 # Histograms (Luminance channel)
 axes[1, 0].hist(rgb2lab(retina_image)[:,:,0][rgb2lab(retina_image)[:,:,0] > 5].ravel(), bins=256, color='red', alpha=0.7)
@@ -90,7 +89,7 @@ axes[1, 1].hist(rgb2lab(retina_ref)[:,:,0][rgb2lab(retina_ref)[:,:,0] > 5].ravel
 axes[1, 1].set_title('Reference L* Histogram')
 
 axes[1, 2].hist(rgb2lab(matched_image)[:,:,0][rgb2lab(matched_image)[:,:,0] > 5].ravel(), bins=256, color='green', alpha=0.7)
-axes[1, 2].set_title('Matched L* Histogram')
+axes[1, 2].set_title('L* Histogram (after Matching)')
 
 for ax_row in axes:
     for ax in ax_row:
