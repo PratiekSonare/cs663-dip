@@ -70,6 +70,7 @@ im1 = axes[0].imshow(
 axes[0].set_title('Original Image')
 axes[0].set_xlabel('Pixel Column')
 axes[0].set_ylabel('Pixel Row')
+fig.colorbar(im1, ax=axes[0])
 
 im2 = axes[1].imshow(
     enlarged_bilinear,
@@ -80,6 +81,7 @@ im2 = axes[1].imshow(
 axes[1].set_title('Enlarged (Bilinear)')
 axes[1].set_xlabel('Pixel Column')
 axes[1].set_ylabel('Pixel Row')
+fig.colorbar(im2, ax=axes[1])
 
-fig.colorbar(im2, ax=axes)
+plt.tight_layout()
 plt.show()

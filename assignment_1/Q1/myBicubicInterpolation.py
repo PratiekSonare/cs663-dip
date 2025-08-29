@@ -41,7 +41,7 @@ def myBicubicInterpolation(image, new_rows, new_cols):
                     value += px * wx * wy
             new_image[i, j] = value
             
-    return np.clip(new_image, 0, 1)
+    return new_image
 
 # Load the input image
 try:

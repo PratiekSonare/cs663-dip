@@ -46,4 +46,5 @@ axes[2].set_xlabel('Pixel Column')
 axes[2].set_ylabel('Pixel Row')
 fig.colorbar(im3, ax=axes, orientation='vertical')
 
+plt.tight_layout()
 plt.show()
