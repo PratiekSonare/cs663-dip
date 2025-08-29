@@ -139,34 +139,36 @@ try:
     print(f"RMSE (Bilinear): {rmse_bilinear:.4f}")
     print(f"RMSE (Bicubic): {rmse_bicubic:.4f}")
 
+    fig, axes = plt.subplots(2, 4, figsize=(20, 10))
 
-    fig, axes = plt.subplots(1, 4, figsize=(20, 10))
+    axes[0, 0].set_title('Subsampled Image')
+    im = axes[0, 0].imshow(subsampled_ct, cmap='jet')
 
-    axes[0].set_title('Original')
-    im = axes[0].imshow(original_ct, cmap='jet')
+    axes[0, 1].set_title(f'Nearest Neighbor\nRMSE: {rmse_nn:.2f}')
+    im = axes[0, 1].imshow(enlarged_nn_ct, cmap='jet')
 
-    # axes[1].set_title(f'Nearest Neighbor\nRMSE: {rmse_nn:.2f}')
-    # im = axes[1].imshow(enlarged_nn_ct, cmap='jet')
+    axes[0, 2].set_title(f'Bilinear\nRMSE: {rmse_bilinear:.2f}')
+    im = axes[0, 2].imshow(enlarged_bilinear_ct, cmap='jet')
 
-    # axes[2].set_title(f'Bilinear\nRMSE: {rmse_bilinear:.2f}')
-    # im = axes[2].imshow(enlarged_bilinear_ct, cmap='jet')
-
-    # axes[3].set_title(f'Bicubic\nRMSE: {rmse_bicubic:.2f}')
-    # im = axes[3].imshow(enlarged_bicubic_ct, cmap='jet')
-    # fig.colorbar(im, ax=axes, orientation='vertical')
+    axes[0, 3].set_title(f'Bicubic\nRMSE: {rmse_bicubic:.2f}')
+    im = axes[0, 3].imshow(enlarged_bicubic_ct, cmap='jet')
+    fig.colorbar(im, ax=axes, orientation='vertical')
 
     # plt.show()
 
     # axes[1, 0].axis('off')
 
-    axes[1].set_title('Difference (NN)')
-    im = axes[1].imshow(diff_nn, cmap='jet')
+    axes[1, 0].set_title('Subsampled Image')
+    im = axes[1, 0].imshow(subsampled_ct, cmap='jet')
+    
+    axes[1, 1].set_title('Difference (NN)')
+    im = axes[1, 1].imshow(diff_nn, cmap='jet')
 
-    axes[2].set_title('Difference (Bilinear)')
-    im = axes[2].imshow(diff_bilinear, cmap='jet')
+    axes[1, 2].set_title('Difference (Bilinear)')
+    im = axes[1, 2].imshow(diff_bilinear, cmap='jet')
 
-    axes[3].set_title('Difference (Bicubic)')
-    im = axes[3].imshow(diff_bicubic, cmap='jet')
+    axes[1, 3].set_title('Difference (Bicubic)')
+    im = axes[1, 3].imshow(diff_bicubic, cmap='jet')
     
     fig.colorbar(im, ax=axes, orientation='vertical')
 

@@ -55,7 +55,7 @@ small_grid_result, small_l = apply_clahe_skimage(l_channel, a_channel, b_channel
 low_clip_result, low_clip_l = apply_clahe_skimage(l_channel, a_channel, b_channel, clip_limit=0.005, grid_size=(8, 8))
 
 # --- FIGURE 1: Images ---
-fig1, axes1 = plt.subplots(1, 5, figsize=(25, 8))
+fig1, axes1 = plt.subplots(5, 1, figsize=(8, 15))
 images = [canyon_image, tuned_result, large_grid_result, small_grid_result, low_clip_result]
 titles = ['Original', 
           'Tuned (Clip=0.02, Grid=8x8)', 

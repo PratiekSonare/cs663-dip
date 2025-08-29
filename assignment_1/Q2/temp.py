@@ -1,37 +1,42 @@
-#1. convert all images to unit8 dtype, i.e, (0, 255) range of values
-#2. average out the RGB channels for grayscale
-#3. apply threshold on the grayscaled img
-
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from skimage.filters import threshold_niblack
 
 
-def manualThresholding(image, threshold):
+def niblackThresholding(image, window_size=15, k=-0.2):
     """
-    Performs thresholding by assigning pixels to black (0) if < threshold else white (255).
+    Apply Niblack's local thresholding.
 
     Args:
-        image_rgb (np.array): Input RGB image with values in [0, 255] or [0, 1]. If [0,1 ] conver to unit8 dtype.
-        threshold (int): Threshold value.
+        image (np.array): Input RGB/grayscale image with values in [0,255] or [0,1].
+        window_size (int): Size of the local neighborhood window.
+        k (float): Niblack parameter (default -0.2).
 
     Returns:
-        np.array: Thresholded binary image (0 or 255).
+        gray (np.array): Grayscale image.
+        binary (np.array): Thresholded image (0 or 255).
     """
-    
-    #Convert to unit8 dtype - (0, 255)
-    image = (image * 255).astype(np.uint8)
-    
-    # Convert RGB -> grayscale by averaging across color channels
-    if(image.ndim == 3):
-        gray = np.mean(image, axis=2)
+    # Convert to uint8 (0–255)
+    if np.issubdtype(image.dtype, np.floating):
+        if image.max() <= 1.0:
+            image = (image * 255).astype(np.uint8)
+        else:
+            image = ((image - image.min()) / (image.max() - image.min()) * 255).astype(np.uint8)
+    elif image.dtype != np.uint8:
+        image = ((image - image.min()) / (image.max() - image.min()) * 255).astype(np.uint8)
+
+    # Convert to grayscale
+    if image.ndim == 3:
+        gray = np.mean(image[:, :, :3], axis=2).astype(np.uint8)
     else:
         gray = image
 
-    # Apply threshold
-    thresh = np.where(gray < threshold, 0, 255).astype(np.uint8)
+    # Apply Niblack threshold
+    thresh = threshold_niblack(gray, window_size=window_size, k=k)
+    binary = np.where(gray > thresh, 255, 0).astype(np.uint8)
 
-    return gray, thresh
+    return gray, binary
 
 
 # ---- Load images ----
@@ -46,26 +51,17 @@ except FileNotFoundError:
 input_images = [input_1, input_2, input_3, input_4]
 titles = ["Receipt", "QR Code", "Blackboard", "Lilavati"]
 
+window_sizes = [5, 15, 25]
+
 # ---- Visualization ----
-fig, axes = plt.subplots(4, 3, figsize=(12, 12))
+fig, axes = plt.subplots(len(input_images), len(window_sizes), figsize=(12, 12))
 
 for i, img in enumerate(input_images):
-    gray, thresh = manualThresholding(img, 175)
-
-    # Original
-    axes[i, 0].imshow(img)
-    axes[i, 0].set_title(f"{titles[i]} - Original")
-    axes[i, 0].axis("off")
-
-    # Grayscale
-    axes[i, 1].imshow(gray, cmap="gray")
-    axes[i, 1].set_title("Grayscale")
-    axes[i, 1].axis("off")
-
-    # Thresholded
-    axes[i, 2].imshow(thresh, cmap="gray")
-    axes[i, 2].set_title("Thresholded")
-    axes[i, 2].axis("off")
+    for j, ws in enumerate(window_sizes):
+        gray, binary = niblackThresholding(img, window_size=ws, k=-0.2)
+        axes[i, j].imshow(binary, cmap="gray")
+        axes[i, j].set_title(f"{titles[i]}\nWin={ws}")
+        axes[i, j].axis("off")
 
 plt.tight_layout()
 plt.show()
