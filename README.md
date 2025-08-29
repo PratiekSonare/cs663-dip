@@ -1,4 +1,4 @@
-CS722
-Fundamentals of Digital Image Processing
+**CS663
+Fundamentals of Digital Image Processing**
 
 Assignments | Group Project Repo
